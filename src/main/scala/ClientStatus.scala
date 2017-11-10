@@ -17,15 +17,11 @@ object ClientStore{
     Put(db_status)
   }
 
-  def Put(new_status: ClientStatus) = {
-    if(new_status.status == STATUS_OFFLINE) {
-      map.remove(new_status.client)
-    } else {
-      map.put(new_status.client, new_status)
-    }
+  def Put(new_status: ClientStatus) = new_status match {
+    case ClientStatus(_, _, STATUS_OFFLINE) => map.remove(new_status.client)
+    case _ => map.put(new_status.client, new_status)
   }
-
-
+  
   def GetLocation(client: String): Option[ClientStatus] = {
     map.get(client) match {
         case status:ClientStatus => Some(status)
